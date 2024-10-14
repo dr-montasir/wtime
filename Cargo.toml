@@ -1,0 +1,18 @@
+[package]
+name = "wtime"
+version = "0.0.0"
+authors = ["Montasir Mirghani <contact@montasir.me>"]
+edition = "2021"
+description = "wtime"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/dr-montasir/wtime"
+repository = "https://github.com/dr-montasir/wtime"
+readme = "README.md"
+keywords = ["time", "date", "tz", "utc", "local"]
+categories = ["date-and-time"]
+
+[dependencies]
+
+[lib]
+name = "wtime"
+path = "src/lib.rs"
