@@ -1,9 +1,9 @@
 [package]
 name = "wtime"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Montasir Mirghani <contact@montasir.me>"]
 edition = "2021"
-description = "wtime"
+description = "WTIME provides a variety of functions for obtaining the current UTC and local times, as well as generating customizable timestamps to suit your needs."
 license = "MIT OR Apache-2.0"
 homepage = "https://github.com/dr-montasir/wtime"
 repository = "https://github.com/dr-montasir/wtime"

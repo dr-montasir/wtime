@@ -1,0 +1,7 @@
+<svg width="200" height="80" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="80" fill="none" stroke="#7A9E9F" stroke-width="15" />
+  <circle cx="40" cy="40" r="25" fill="#7A9E9F" />
+  <text x="40" y="45" font-family="Arial" font-size="32" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">W</text>
+  <rect x="80" y="15" width="100" height="50" fill="#FE5F55" />
+  <text x="130" y="45" font-family="Arial" font-size="32" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">TIME</text>
+</svg>

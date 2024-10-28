@@ -370,8 +370,8 @@ pub fn get_day() -> u64 {
 /// let day = get_day();
 /// println!("Current day: {}", day);
 ///
-/// let day_name = get_day_name(1_600_000_000);
-/// println!("Day name: {}", day_name); // e.g., "Saturday"
+/// let day_name = get_day_name(1_670_000_000);
+/// println!("Day name: {}", day_name); // Day name: Friday
 /// println!("Day name: {}", get_day_name(day));
 /// ```
 ///
