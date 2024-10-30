@@ -1,3 +1,7 @@
+### v0.3.0
+
+- Added format_utc_ts function
+
 ### v0.2.0
 
 - Improved Documentation

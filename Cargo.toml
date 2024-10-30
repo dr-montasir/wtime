@@ -1,6 +1,6 @@
 [package]
 name = "wtime"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Montasir Mirghani <contact@montasir.me>"]
 edition = "2021"
 description = "WTIME provides a variety of functions for obtaining the current UTC and local times, as well as generating customizable timestamps to suit your needs."
