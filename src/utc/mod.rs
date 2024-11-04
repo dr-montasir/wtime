@@ -1,4 +1,5 @@
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use super::calc::{calc_date, duration_since};
+use std::time::SystemTime;
 
 /// ### utc_now()
 ///
@@ -31,35 +32,6 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 /// <small>End Fun Doc</small>
 pub fn utc_now() -> SystemTime {
     SystemTime::now()
-}
-
-/// ### duration_since()
-///
-/// Returns the duration from the UNIX epoch to the current time.
-///
-/// This function calculates the amount of time that has elapsed since the UNIX epoch
-/// (January 1, 1970) and returns it as a `Duration`. This can be useful for calculations
-/// involving specific time intervals.
-///
-/// ### Example
-///
-/// ```
-/// use wtime::utc::duration_since;
-///
-/// let duration = duration_since();
-/// println!("Seconds since UNIX epoch: {:?}", duration.as_secs());
-/// println!("Milli-seconds since UNIX epoch: {:?}", duration_since().as_millis());
-/// ```
-///
-/// ### Panics
-///
-/// This function will panic if the current system time is before the UNIX epoch.
-///
-/// <small>End Fun Doc</small>
-pub fn duration_since() -> Duration {
-    utc_now()
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards")
 }
 
 /// ### utc_ts_sec()
@@ -155,90 +127,6 @@ pub fn utc_ts_nanos() -> u128 {
     duration_since().as_nanos()
 }
 
-/// ### is_leap_year(year: u64) -> bool
-///
-/// Determines if a given year is a leap year.
-///
-/// This function checks if the provided year is a leap year according to the rules:
-/// a year is a leap year if it is divisible by 4 but not divisible by 100, except for years
-/// that are divisible by 400.
-///
-/// ### Example
-///
-/// ```
-/// use wtime::utc::{is_leap_year, get_year};
-///
-/// let year = 2024;
-/// println!("Is {} a leap year? {}", year, is_leap_year(year)); // true
-/// println!("Is {} a leap year? {}", year, is_leap_year(get_year()));
-/// ```
-///
-/// ### Returns
-///
-/// Returns `true` if the year is a leap year, otherwise returns `false`.
-///
-/// <small>End Fun Doc</small>
-pub fn is_leap_year(year: u64) -> bool {
-    (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
-}
-
-/// ### calculate_date(total_seconds: u64) -> (u64, u64, u64)
-///
-/// Calculates the date (year, month, day) from total seconds since the UNIX epoch.
-///
-/// This function takes a count of seconds since the UNIX epoch and computes the corresponding
-/// calendar date.
-///
-/// ### Example
-///
-/// ```
-/// use wtime::utc::calculate_date;
-///
-/// let seconds = 1_600_000_000; // Example total seconds since UNIX epoch
-/// let (year, month, day) = calculate_date(seconds);
-/// println!("Date: {}-{}-{}", year, month, day);
-/// assert_eq!(calculate_date(1728933069), (2024, 10, 14));
-/// ```
-///
-/// ### Returns
-///
-/// Returns a tuple containing the year, month, and day extracted from the total seconds.
-///
-/// <small>End Fun Doc</small>
-pub fn calculate_date(total_seconds: u64) -> (u64, u64, u64) {
-    let mut seconds_remaining = total_seconds;
-
-    // Calculate current year
-    let mut year = 1970;
-    while seconds_remaining >= 31_536_000 + if is_leap_year(year) { 86_400 } else { 0 } {
-        seconds_remaining -= 31_536_000 + if is_leap_year(year) { 86_400 } else { 0 };
-        year += 1;
-    }
-
-    // Calculate current month and day
-    let month_days = if is_leap_year(year) {
-        [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    } else {
-        [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    };
-
-    let mut month = 0;
-    while month < 12 {
-        let days_in_month = month_days[month];
-        let seconds_in_month = days_in_month * 86_400; // 86,400 seconds in a day
-
-        if seconds_remaining < seconds_in_month {
-            break;
-        }
-
-        seconds_remaining -= seconds_in_month;
-        month += 1;
-    }
-
-    let day = seconds_remaining / 86_400 + 1; // +1 to convert to 1-based day
-    (year, (month + 1) as u64, day) // +1 for 1-based month
-}
-
 /// ### get_year() -> u64
 ///
 /// Retrieves the current year.
@@ -260,7 +148,7 @@ pub fn calculate_date(total_seconds: u64) -> (u64, u64, u64) {
 ///
 /// <small>End Fun Doc</small>
 pub fn get_year() -> u64 {
-    let (year, _, _) = calculate_date(utc_ts_sec());
+    let (year, _, _) = calc_date(utc_ts_sec());
     year
 }
 
@@ -285,50 +173,8 @@ pub fn get_year() -> u64 {
 ///
 /// <small>End Fun Doc</small>
 pub fn get_month() -> u64 {
-    let (_, month, _) = calculate_date(utc_ts_sec());
+    let (_, month, _) = calc_date(utc_ts_sec());
     month
-}
-
-/// ### get_month_name(month: u64) -> &'static str
-///
-/// Returns the name of the month corresponding to the provided month number.
-///
-/// This function takes a month number (from 1 to 12) and returns the corresponding month name.
-///
-/// ### Example
-///
-/// ```
-/// use wtime::utc::{get_month_name, get_month};
-///
-/// let month = get_month();
-/// println!("Current month: {}", month);
-///
-/// let month_name = get_month_name(4);
-/// println!("Month name: {}", month_name); // "April"
-/// println!("Month name: {}", get_month_name(month));
-/// ```
-///
-/// ### Panics
-///
-/// This function will panic if provided with an invalid month number (not between 1 and 12).
-///
-/// <small>End Fun Doc</small>
-pub fn get_month_name(month: u64) -> &'static str {
-    const MONTHS: [&str; 12] = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
-    MONTHS[(month - 1) as usize] // -1 to convert from 1-indexed to 0-indexed
 }
 
 /// ### get_day() -> u64
@@ -352,46 +198,8 @@ pub fn get_month_name(month: u64) -> &'static str {
 ///
 /// <small>End Fun Doc</small>
 pub fn get_day() -> u64 {
-    let (_, _, day) = calculate_date(utc_ts_sec());
+    let (_, _, day) = calc_date(utc_ts_sec());
     day
-}
-
-/// ### get_day_name(total_seconds: u64) -> &'static str
-///
-/// Returns the name of the day of the week corresponding to the total seconds since the UNIX epoch.
-///
-/// This function calculates the day name based on the total seconds since the UNIX epoch.
-///
-/// ### Example
-///
-/// ```
-/// use wtime::utc::{get_day_name, get_day};
-///
-/// let day = get_day();
-/// println!("Current day: {}", day);
-///
-/// let day_name = get_day_name(1_670_000_000);
-/// println!("Day name: {}", day_name); // Day name: Friday
-/// println!("Day name: {}", get_day_name(day));
-/// ```
-///
-/// ### Returns
-///
-/// Returns the name of the day as a static string reference.
-///
-/// <small>End Fun Doc</small>
-pub fn get_day_name(total_seconds: u64) -> &'static str {
-    const DAYS: [&str; 7] = [
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-    ]; // Starting from 1970-01-01
-    let days_since_epoch = (total_seconds / 86_400) % 7; // Total days since UNIX epoch modulo 7
-    DAYS[days_since_epoch as usize]
 }
 
 /// ### get_hour() -> u64

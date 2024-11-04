@@ -65,7 +65,27 @@ wtime = "MAJOR.MINOR.PATCH" # Replace with the latest version
 
 ## Usage
 
-### 1. LOCAL
+### 1. CALC
+
+```rust
+use wtime::calc::{calc_date, calc_week, get_day_name};
+use wtime::utc::get_day;
+
+fn main() {
+    let (year, month, day) = calc_date(1728933069);
+    println!("Date: {}-{}-{}", year, month, day); // Date: 2024-10-14
+    
+    let week_number = calc_week((2024, 10, 14));
+    println!("Week number: {}", week_number); // 42
+    
+    let day = get_day();
+    let day_name = get_day_name(1_670_000_000);
+    println!("Day name: {}", day_name); // Day name: Friday
+    println!("Day name: {}", get_day_name(day));
+}
+```
+
+### 2. LOCAL
 
 ```rust
 use wtime::local::local_ts_nanos;
@@ -80,7 +100,7 @@ fn main() {
 }
 ```
 
-### 2. TZ
+### 3. TZ
 
 ```rust
 use wtime::tz::{tz_number, tz_string};
@@ -94,21 +114,14 @@ fn main() {
 }
 ```
 
-### 3. UTC
+### 4. UTC
 
 ```rust
-use wtime::utc::{calculate_date, format_utc_ts, get_day, get_day_name};
+use wtime::utc::{format_utc_ts, get_day};
 
 fn main() {
     let day = get_day();
     println!("Current day: {}", day);
-
-    let day_name = get_day_name(1_670_000_000);
-    println!("Day name: {}", day_name); // Day name: Friday
-    println!("Day name: {}", get_day_name(day));
-
-    let (year, month, day) = calculate_date(1728933069);
-    println!("Date: {}-{}-{}", year, month, day); // Date: 2024-10-14
 
     let timestamp = format_utc_ts();
     println!("Formatted UTC Timestamp: {}", timestamp);
@@ -129,6 +142,13 @@ fn main() {
 
 ## Documentation
 
+### [CALC](https://docs.rs/wtime/latest/wtime/calc/index.html)
+
+|                           Function                           |                           Function                           |                           Function                           |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| [calc_date](https://docs.rs/wtime/latest/wtime/calc/fn.calc_date.html) | [calc_week](https://docs.rs/wtime/latest/wtime/calc/fn.calc_week.html) | [duration_since](https://docs.rs/wtime/latest/wtime/calc/fn.duration_since.html) |
+| [get_day_name](https://docs.rs/wtime/latest/wtime/calc/fn.get_day_name.html) | [get_month_name](https://docs.rs/wtime/latest/wtime/calc/fn.get_month_name.html) | [is_leap_year](https://docs.rs/wtime/latest/wtime/calc/fn.is_leap_year.html) |
+
 ### [LOCAL](https://docs.rs/wtime/latest/wtime/local/index.html)
 
 |                           Function                           |                           Function                           |                           Function                           |
@@ -143,14 +163,13 @@ fn main() {
 
 ### [UTC](https://docs.rs/wtime/latest/wtime/utc/index.html)
 
-|                                    Function                                     |                                    Function                                     |                                   Function                                    |
-| :-----------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :---------------------------------------------------------------------------: |
-| [calculate_date](https://docs.rs/wtime/latest/wtime/utc/fn.calculate_date.html) | [duration_since](https://docs.rs/wtime/latest/wtime/utc/fn.duration_since.html) | [format_utc_ts](https://docs.rs/wtime/latest/wtime/utc/fn.format_utc_ts.html) |
-|        [get_day](https://docs.rs/wtime/latest/wtime/utc/fn.get_day.html)        |   [get_day_name](https://docs.rs/wtime/latest/wtime/utc/fn.get_day_name.html)   |      [get_hour](https://docs.rs/wtime/latest/wtime/utc/fn.get_hour.html)      |
-|     [get_millis](https://docs.rs/wtime/latest/wtime/utc/fn.get_millis.html)     |     [get_minute](https://docs.rs/wtime/latest/wtime/utc/fn.get_minute.html)     |     [get_month](https://docs.rs/wtime/latest/wtime/utc/fn.get_month.html)     |
-| [get_month_name](https://docs.rs/wtime/latest/wtime/utc/fn.get_month_name.html) |      [get_nanos](https://docs.rs/wtime/latest/wtime/utc/fn.get_nanos.html)      |    [get_second](https://docs.rs/wtime/latest/wtime/utc/fn.get_second.html)    |
-|       [get_year](https://docs.rs/wtime/latest/wtime/utc/fn.get_year.html)       |   [is_leap_year](https://docs.rs/wtime/latest/wtime/utc/fn.is_leap_year.html)   |       [utc_now](https://docs.rs/wtime/latest/wtime/utc/fn.utc_now.html)       |
-|  [utc_ts_millis](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_millis.html)  |   [utc_ts_nanos](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_nanos.html)   |    [utc_ts_sec](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_sec.html)    |
+|                           Function                           |                           Function                           |                           Function                           |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| [format_utc_ts](https://docs.rs/wtime/latest/wtime/utc/fn.format_utc_ts.html) | [get_day](https://docs.rs/wtime/latest/wtime/utc/fn.get_day.html) | [get_hour](https://docs.rs/wtime/latest/wtime/utc/fn.get_hour.html) |
+| [get_millis](https://docs.rs/wtime/latest/wtime/utc/fn.get_millis.html) | [get_minute](https://docs.rs/wtime/latest/wtime/utc/fn.get_minute.html) | [get_month](https://docs.rs/wtime/latest/wtime/utc/fn.get_month.html) |
+| [get_nanos](https://docs.rs/wtime/latest/wtime/utc/fn.get_nanos.html) | [get_second](https://docs.rs/wtime/latest/wtime/utc/fn.get_second.html) | [get_year](https://docs.rs/wtime/latest/wtime/utc/fn.get_year.html) |
+| [utc_now](https://docs.rs/wtime/latest/wtime/utc/fn.utc_now.html) | [utc_ts_millis](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_millis.html) | [utc_ts_nanos](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_nanos.html) |
+|                              _                               | [utc_ts_sec](https://docs.rs/wtime/latest/wtime/utc/fn.utc_ts_sec.html) |                              _                               |
 
 ## License
 

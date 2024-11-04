@@ -3,6 +3,7 @@
     html_root_url = "https://docs.rs/wtime/latest/wtime"
 )]
 
+pub mod calc;
 pub mod local;
 pub mod tz;
 pub mod utc;
