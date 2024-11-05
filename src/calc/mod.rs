@@ -1,4 +1,4 @@
-use super::utc::utc_now;
+use super::utc::{utc_now, utc_ts_sec};
 use std::time::{Duration, UNIX_EPOCH};
 
 /// ### calc_date(total_seconds: u64) -> (u64, u64, u64)
@@ -249,4 +249,106 @@ pub fn get_month_name(month: u64) -> &'static str {
 /// <small>End Fun Doc</small>
 pub fn is_leap_year(year: u64) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+/// ### get_minute() -> u64
+///
+/// Retrieves the current minute of the hour.
+///
+/// This function calculates the current minute based on the current UTC timestamp.
+///
+/// ### Example
+///
+/// ```
+/// use wtime::calc::get_minute;
+///
+/// let minute = get_minute();
+/// println!("Current minute: {}", minute);
+/// ```
+///
+/// ### Returns
+///
+/// Returns the current minute of the hour as a `u64`.
+///
+/// <small>End Fun Doc</small>
+pub fn get_minute() -> u64 {
+    let minute = (utc_ts_sec() / 60) % 60;
+    minute
+}
+
+/// ### get_second() -> u64
+///
+/// Retrieves the current second of the minute.
+///
+/// This function calculates the current second based on the current UTC timestamp.
+///
+/// ### Example
+///
+/// ```
+/// use wtime::calc::get_second;
+///
+/// let second = get_second();
+/// println!("Current second: {}", second);
+/// ```
+///
+/// ### Returns
+///
+/// Returns the current second of the minute as a `u64`.
+///
+/// <small>End Fun Doc</small>
+pub fn get_second() -> u64 {
+    let second = utc_ts_sec() % 60;
+    second
+}
+
+/// ### get_millis() -> u64
+///
+/// Retrieves the current milliseconds based on the elapsed time since the UNIX epoch.
+///
+/// This function calculates the current elapsed milliseconds since the UNIX epoch
+/// and returns only the millisecond component (0-999).
+///
+/// ### Example
+///
+/// ```
+/// use wtime::calc::get_millis;
+///
+/// let millis = get_millis();
+/// println!("Current milliseconds: {}", millis);
+/// ```
+///
+/// ### Returns
+///
+/// Returns the current milliseconds as a `u64`.
+///
+/// <small>End Fun Doc</small>
+pub fn get_millis() -> u64 {
+    let millis = duration_since().as_millis() % 1000;
+    millis as u64
+}
+
+/// ### get_nanos() -> u64
+///
+/// Retrieves the current nanoseconds based on the elapsed time since the UNIX epoch.
+///
+/// This function calculates the current elapsed nanoseconds since the UNIX epoch
+/// and returns only the nanosecond component (0-999,999).
+///
+/// ### Example
+///
+/// ```
+/// use wtime::calc::get_nanos;
+///
+/// let nanos = get_nanos();
+/// println!("Current nanoseconds: {}", nanos);
+/// ```
+///
+/// ### Returns
+///
+/// Returns the current nanoseconds as a `u64`.
+///
+/// <small>End Fun Doc</small>
+pub fn get_nanos() -> u64 {
+    let nanos = duration_since().as_nanos() % 1_000_000;
+    nanos as u64
 }
